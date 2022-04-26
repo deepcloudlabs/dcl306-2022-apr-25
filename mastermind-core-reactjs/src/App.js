@@ -3,6 +3,7 @@ import {PureComponent} from "react";
 import CardHeader from "./components/CardHeader";
 import Badge from "./components/Badge";
 import Move from "./model/Move";
+import MoveEvaluation from "./components/MoveEvaluation";
 // Components: i) Stateless       ii) Stateful : App
 //                function App()      class App { }
 //                Badge,CardHeader    function App(){ React Hooks }
@@ -19,8 +20,8 @@ import Move from "./model/Move";
 
 
 class App extends PureComponent {
-    constructor(context, props) {
-        super(context);
+    constructor(props, context) {
+        super(props, context);
         this.state = { // view model
             game: {
                 secret: this.createSecret(3),
@@ -39,12 +40,32 @@ class App extends PureComponent {
         };
     }
 
+    componentDidMount() {
+        console.log("componentDidMount() is running...")
+        setInterval(this.countDown, 1000);
+    }
+
+    countDown = () => {
+        let game = {...this.state.game};
+        game.counter--;
+        console.log(game.counter)
+        if (game.counter <= 0) {
+            game.lives--;
+            if (game.lives === 0) {
+                //TODO: Player loses!
+            } else {
+                this.initGame(game);
+            }
+        }
+        this.setState({game});
+    }
+
     handleInputChange = (e) => {
         let value = Number(e.target.value);
         let game = {...this.state.game}; // cloning the state
         game.guess = value; //
         this.setState({game}, () => {
-            console.log(this.state.game.guess);
+            // console.log(this.state.game.guess);
         }); // async
     }
 
@@ -100,7 +121,7 @@ class App extends PureComponent {
                 }
             }
         }
-        return new Move(guess,perfectMatch, partialMatch);
+        return new Move(guess, perfectMatch, partialMatch);
     }
 
     createDigit = (min, max) => {
@@ -139,10 +160,13 @@ class App extends PureComponent {
                                value={this.state.game.gameLevel}></Badge>
                         <Badge id="tries"
                                label="Tries"
-                               value={this.state.game.numberOfMoves}></Badge>
+                               value={this.state.game.numberOfMoves + " of " + this.state.game.maxNumberOfMoves}></Badge>
                         <Badge id="lives"
                                label="Lives"
                                value={this.state.game.lives}></Badge>
+                        <Badge id="counter"
+                               label="Counter"
+                               value={this.state.game.counter}></Badge>
                         <div className="form-group">
                             <label htmlFor="guess">Guess:</label>
                             <input type="text"
@@ -163,19 +187,19 @@ class App extends PureComponent {
                     <div className="card-body">
                         <table className="table table-bordered table-responsive table-hover table-striped">
                             <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Guess</th>
-                                    <th>Message</th>
-                                </tr>
+                            <tr>
+                                <th>No</th>
+                                <th>Guess</th>
+                                <th>Message</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {
                                 this.state.game.moves.map((move, index) =>
                                     <tr key={move.guess + index.toString()}>
-                                        <td>{index+1}</td>
+                                        <td>{index + 1}</td>
                                         <td>{move.guess}</td>
-                                        <td>{move.message}</td>
+                                        <td><MoveEvaluation move={move} /></td>
                                     </tr>
                                 )
                             }
