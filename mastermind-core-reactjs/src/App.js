@@ -41,14 +41,18 @@ class App extends PureComponent {
     }
 
     componentDidMount() {
-        console.log("componentDidMount() is running...")
-        setInterval(this.countDown, 1000);
+        clearInterval(this.timerId);
+        this.timerId = setInterval(this.countDown, 1000);
+        let gameAsString = localStorage.getItem("mastermind-game");
+        if (gameAsString){
+            let game = JSON.parse(gameAsString);
+            this.setState({game});
+        }
     }
 
     countDown = () => {
         let game = {...this.state.game};
         game.counter--;
-        console.log(game.counter)
         if (game.counter <= 0) {
             game.lives--;
             if (game.lives === 0) {
@@ -57,7 +61,7 @@ class App extends PureComponent {
                 this.initGame(game);
             }
         }
-        this.setState({game});
+        this.setState({game},this.saveToLocalStorage);
     }
 
     handleInputChange = (e) => {
@@ -66,6 +70,7 @@ class App extends PureComponent {
         game.guess = value; //
         this.setState({game}, () => {
             // console.log(this.state.game.guess);
+            this.saveToLocalStorage();
         }); // async
     }
 
@@ -92,7 +97,12 @@ class App extends PureComponent {
             }
         }
         //endregion
-        this.setState({game});
+        this.setState({game},this.saveToLocalStorage);
+    }
+
+    saveToLocalStorage = () => {
+        let game = {...this.state.game};
+        localStorage.setItem("mastermind-game",JSON.stringify(game));
     }
 
     initGame = (game) => {
