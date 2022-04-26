@@ -4,9 +4,9 @@ import CardHeader from "./components/CardHeader";
 import Badge from "./components/Badge";
 import Move from "./model/Move";
 import MoveEvaluation from "./components/MoveEvaluation";
-// Components: i) Stateless       ii) Stateful : App
-//                function App()      class App { }
-//                Badge,CardHeader    function App(){ React Hooks }
+// Components: i) Stateless ✔       ii) Stateful : App ✔
+//                function App()      class App { } ✔
+//                Badge,CardHeader    function App(){ React Hooks } ✘
 // React Framework -> Functional Programming -> this.setState( nextState )
 // State Management
 //    i) Stateful Component
@@ -14,9 +14,9 @@ import MoveEvaluation from "./components/MoveEvaluation";
 //  iii) Rest API (server), localStorage/sessionStorage (client)
 //   iv) Redux Framework
 
-// Routing
+// Routing ✘
 // Validation
-// 2-way Binding: View Model -- {this.state...} --> View
+// 2-way Binding: View Model -- {this.state...} --> View ✔
 
 
 class App extends PureComponent {
@@ -43,7 +43,7 @@ class App extends PureComponent {
     componentDidMount() {
         clearInterval(this.timerId);
         this.timerId = setInterval(this.countDown, 1000);
-        let gameAsString = localStorage.getItem("mastermind-game");
+        let gameAsString = localStorage.getItem("mastermind-game2");
         if (gameAsString){
             let game = JSON.parse(gameAsString);
             this.setState({game});
@@ -55,8 +55,8 @@ class App extends PureComponent {
         game.counter--;
         if (game.counter <= 0) {
             game.lives--;
-            if (game.lives === 0) {
-                //TODO: Player loses!
+            if (game.lives <= 0) {
+                //TODO: Player loses
             } else {
                 this.initGame(game);
             }
@@ -87,8 +87,8 @@ class App extends PureComponent {
         } else {
             if (game.numberOfMoves >= game.maxNumberOfMoves) {
                 game.lives--;
-                if (game.lives === 0) {
-                    //TODO: Player Loses
+                if (game.lives <= 0) {
+                    //TODO: Player loses
                 } else {
                     this.initGame(game);
                 }
@@ -102,7 +102,7 @@ class App extends PureComponent {
 
     saveToLocalStorage = () => {
         let game = {...this.state.game};
-        localStorage.setItem("mastermind-game",JSON.stringify(game));
+        localStorage.setItem("mastermind-game2",JSON.stringify(game));
     }
 
     initGame = (game) => {
