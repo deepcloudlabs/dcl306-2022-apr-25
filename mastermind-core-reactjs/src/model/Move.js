@@ -1,5 +1,6 @@
 export default class Move {
-    constructor(perfectMatch, partialMatch) {
+    constructor(guess,perfectMatch, partialMatch) {
+        this.guess = guess;
         this.perfectMatch = perfectMatch;
         this.partialMatch = partialMatch;
         this.message = "";

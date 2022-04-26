@@ -17,6 +17,7 @@ import Move from "./model/Move";
 // Validation
 // 2-way Binding: View Model -- {this.state...} --> View
 
+
 class App extends PureComponent {
     constructor(context, props) {
         super(context);
@@ -24,12 +25,12 @@ class App extends PureComponent {
             game: {
                 secret: this.createSecret(3),
                 gameLevel: 3,
-                numberOfMoves: 0,
                 moves: [],
                 lives: 3,
+                numberOfMoves: 0,
                 maxNumberOfMoves: this.getMaxNumberOfMoves(3),
                 counter: this.getMaxCounter(3),
-                guess: 123
+                guess: 123,
             },
             statistics: {
                 wins: 0,
@@ -49,6 +50,7 @@ class App extends PureComponent {
 
     play = (e) => {
         let game = {...this.state.game}; // cloning the state
+        //region change the state
         game.numberOfMoves++;
         if (game.guess === game.secret) {
             game.gameLevel++;
@@ -68,6 +70,7 @@ class App extends PureComponent {
                 game.moves.push(this.createMove(game.guess, game.secret));
             }
         }
+        //endregion
         this.setState({game});
     }
 
@@ -97,7 +100,7 @@ class App extends PureComponent {
                 }
             }
         }
-        return new Move(perfectMatch, partialMatch);
+        return new Move(guess,perfectMatch, partialMatch);
     }
 
     createDigit = (min, max) => {
@@ -129,7 +132,7 @@ class App extends PureComponent {
         return ( // view model <--> view (component-based)
             <div className="container">
                 <div className="card">
-                    <CardHeader title="---Game Console---"/>
+                    <CardHeader title="Game Console"/>
                     <div className="card-body">
                         <Badge id="gamelevel"
                                label="Game Level"
@@ -152,6 +155,32 @@ class App extends PureComponent {
                                     className="btn btn-success">Play
                             </button>
                         </div>
+                    </div>
+                </div>
+                <p></p>
+                <div className="card">
+                    <CardHeader title="Moves"/>
+                    <div className="card-body">
+                        <table className="table table-bordered table-responsive table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Guess</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                this.state.game.moves.map((move, index) =>
+                                    <tr key={move.guess + index.toString()}>
+                                        <td>{index+1}</td>
+                                        <td>{move.guess}</td>
+                                        <td>{move.message}</td>
+                                    </tr>
+                                )
+                            }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
