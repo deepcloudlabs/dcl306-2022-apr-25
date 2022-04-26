@@ -1,5 +1,9 @@
 import {useState} from "react";
 import Employee from "./model/Employee";
+import Input from "./bootstrap/Input";
+import CheckBox from "./bootstrap/CheckBox";
+import SelectBox from "./bootstrap/SelectBox";
+import Image from "./bootstrap/Image";
 
 export default function HrApp(props){
     const [employee, setEmployee] = useState(new Employee());
