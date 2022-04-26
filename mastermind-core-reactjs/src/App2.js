@@ -3,10 +3,11 @@ import Badge from "./components/Badge";
 import Move from "./model/Move";
 import MoveEvaluation from "./components/MoveEvaluation";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
 
 function App2(props) { // hooks -> stateful
     let initialGameState = {
-        secret: createSecret(3),
+        secret: 123,
         gameLevel: 3,
         moves: [],
         lives: 3,
@@ -22,27 +23,26 @@ function App2(props) { // hooks -> stateful
 
     const [game, setGame] = useState(initialGameState);
     const [statistics, setStatistics] = useState(initialStatisticsState);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        let timerId = setInterval(countDown, 1000);
+        let timerId = setInterval(() => {
+            let newGame = {...game};
+            newGame.counter--;
+            if (newGame.counter <= 0) {
+                newGame.lives--;
+                if (newGame.lives <= 0) {
+                    navigate("/loses");
+                } else {
+                    //initGame(newGame);
+                }
+            }
+            setGame(newGame);
+        }, 1000);
         return () => {
             clearInterval(timerId);
         }
-    }, [game, countDown]);
-
-    function countDown() {
-        let newGame = {...game};
-        newGame.counter--;
-        if (newGame.counter <= 0) {
-            newGame.lives--;
-            if (newGame.lives <= 0) {
-                //TODO: Player loses
-            } else {
-                initGame(newGame);
-            }
-        }
-        setGame(newGame);
-    }
+    }, [game, navigate]);
 
     function handleInputChange(e) {
         let value = Number(e.target.value);
@@ -58,14 +58,14 @@ function App2(props) { // hooks -> stateful
         if (newGame.guess === newGame.secret) {
             newGame.gameLevel++;
             if (newGame.gameLevel > 10) {
-                //TODO: Player wins
+                navigate("/wins");
             }
             initGame(newGame);
         } else {
             if (newGame.numberOfMoves >= newGame.maxNumberOfMoves) {
                 newGame.lives--;
                 if (newGame.lives <= 0) {
-                    //TODO: Player loses
+                    navigate("/loses");
                 } else {
                     initGame(newGame);
                 }
@@ -118,7 +118,9 @@ function App2(props) { // hooks -> stateful
             if (digits.includes(digit)) continue;
             digits.push(digit);
         }
-        return digits.reduce((sum, n) => 10 * sum + n, 0);
+        let number = digits.reduce((sum, n) => 10 * sum + n, 0);
+        console.log(number);
+        return number;
     }
 
     //region get constraints
