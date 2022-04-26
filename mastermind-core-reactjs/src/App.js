@@ -1,9 +1,9 @@
 import './App.css';
 import {PureComponent} from "react";
-import CardHeader from "./components/CardHeader";
-import Badge from "./components/Badge";
+import CardHeader from "./components/bootstrap/CardHeader";
+import Badge from "./components/bootstrap/Badge";
 import Move from "./model/Move";
-import MoveEvaluation from "./components/MoveEvaluation";
+import MoveEvaluation from "./components/common/MoveEvaluation";
 // Components: i) Stateless ✔       ii) Stateful : App ✔
 //                function App()      class App { } ✔
 //                Badge,CardHeader    function App(){ React Hooks } ✘

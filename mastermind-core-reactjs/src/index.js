@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import App2 from './App2';
+import AppWithHooks from './AppWithHooks';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import PlayerWins from "./components/PlayerWins";
-import PlayerLoses from "./components/PlayerLoses";
+import PlayerWins from "./wins/PlayerWins";
+import PlayerLoses from "./loses/PlayerLoses";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 let routing = <Routes>
-    <Route path="/" exact element={<App2/>}></Route>
+    <Route path="/" exact element={<AppWithHooks/>}></Route>
     <Route path="/wins" element={<PlayerWins/>}></Route>
     <Route path="/loses" element={<PlayerLoses/>}></Route>
 </Routes>;
