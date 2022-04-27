@@ -6,13 +6,22 @@ import SelectBox from "./bootstrap/SelectBox";
 import Image from "./bootstrap/Image";
 
 export default function HrApp(props) {
+    // employee : state (react) -> Model (MVC) -> Resource (REST Architecture -> RESTful Service)
     const [employee, setEmployee] = useState(new Employee());
     const [employees, setEmployees] = useState([]);
     const DEPARTMENTS = ["IT", "Sales", "Finance", "HR"];
 
     //region action methods
     function hireEmployee() {
-
+        fetch('http://localhost:4001/employees',{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(employee)
+        }).then( response => response.json() )
+            .then( console.table );
     }
 
     function fireEmployee() {
@@ -43,7 +52,13 @@ export default function HrApp(props) {
     }
 
     function retrieveEmployees() {
-
+        fetch('http://localhost:4001/employees',{
+            method: 'GET',
+            headers: {
+                "Accept": "application/json"
+            }
+        }).then( response => response.json() )
+          .then( emps => setEmployees(emps) );
     }
 
     //endregion
@@ -105,6 +120,48 @@ export default function HrApp(props) {
                                 onClick={retrieveEmployees}>Retrieve Employees
                         </button>
                     </div>
+                </div>
+            </div>
+            <p></p>
+            <div className="card">
+                <div className="card-header">
+                    <h4 className="card-title">Employees</h4>
+                </div>
+                <div className="card-body">
+                    <table className="table table-bordered table-hover table-striped table-responsive">
+                        <thead>
+                         <tr>
+                             <th>No</th>
+                             <th>Photo</th>
+                             <th>Identity No</th>
+                             <th>Full Name</th>
+                             <th>IBAN</th>
+                             <th>Salary</th>
+                             <th>Birth Year</th>
+                             <th>Full-time?</th>
+                             <th>Department</th>
+                             <th>Operations</th>
+                         </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            employees.map( (emp,idx) =>
+                               <tr key={emp.identityNo}>
+                                   <td>{idx+1}</td>
+                                   <td><img className="img-thumbnail" style={{width: "64px"}} src={emp.photo} alt=""></img></td>
+                                   <td>{emp.identityNo}</td>
+                                   <td>{emp.fullname}</td>
+                                   <td>{emp.iban}</td>
+                                   <td>{emp.salary}</td>
+                                   <td>{emp.birthYear}</td>
+                                   <td>{emp.fulltime ? 'FULL-TIME' : 'PART-TIME'}</td>
+                                   <td>{emp.department}</td>
+                                   <td><button className="btn btn-danger">Fire Employee</button></td>
+                               </tr>
+                            )
+                        }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
