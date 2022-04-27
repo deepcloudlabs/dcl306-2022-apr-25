@@ -48,7 +48,13 @@ export default function HrApp(props) {
     }
 
     function findEmployeeByIdentity() {
-
+        fetch(`http://localhost:4001/employees/${employee.identityNo}`,{
+            method: 'GET',
+            headers: {
+                "Accept": "application/json"
+            }
+        }).then( response => response.json() )
+            .then( emp => setEmployee(emp) );
     }
 
     function retrieveEmployees() {
