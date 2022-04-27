@@ -184,7 +184,7 @@ export default function HrApp(props) {
                         <tbody>
                         {
                             employees.map((emp, idx) =>
-                                <tr key={emp.identityNo}>
+                                <tr key={emp.identityNo} onClick={() => setEmployee(emp)}>
                                     <td>{idx + 1}</td>
                                     <td><img className="img-thumbnail" style={{width: "64px"}} src={emp.photo}
                                              alt=""></img></td>
