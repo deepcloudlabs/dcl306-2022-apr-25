@@ -44,7 +44,18 @@ export default function HrApp(props) {
     }
 
     function updateEmployee() {
-
+        fetch('http://localhost:4001/employees',{
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(employee)
+        }).then( response => response.json() )
+            .then( response => {
+                console.table(response);
+                retrieveEmployees();
+            } );
     }
 
     function findEmployeeByIdentity() {
