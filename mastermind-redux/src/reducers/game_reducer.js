@@ -6,11 +6,11 @@ import Move from "../model/move";
 import {createSecret, evaluateMove} from "../utils";
 
 const initialState = {
-    gameLevel : 3,
+    gameLevel: 3,
     tries: 0,
     secret: createSecret(3),
     moves: [],
-    guess : 123,
+    guess: 123,
     statistics: {
         wins: 0,
         loses: 0
@@ -18,29 +18,28 @@ const initialState = {
 };
 
 // export default  function GameReducer(state = initialState,action){
-export default  function GameReducer(state ,action){
-    if (state === undefined){
+export default function GameReducer(state, action) {  // pure function
+    if (state === undefined) {
         // initial state
         return initialState;
     }
     let newState = {...state} // clone
-    //TODO: action -> change the state
-    switch(action.type){
+    switch (action.type) {
         case "GUESS_CHANGED":
             newState.guess = action.value;
             break;
         case "PLAY":
             newState.tries++;
-            if (newState.secret === newState.guess){
+            if (newState.secret === newState.guess) {
                 newState.gameLevel++;
                 newState.tries = 0;
                 newState.moves = [];
                 newState.secret = createSecret(newState.gameLevel);
-                if (newState.gameLevel>10){
+                if (newState.gameLevel > 10) {
                     newState.statistics.wins++;
                 }
             } else {
-                if (newState.tries > 10){
+                if (newState.tries > 10) {
                     newState.statistics.loses++;
                     newState.tries = 0;
                     newState.moves = [];
@@ -50,6 +49,8 @@ export default  function GameReducer(state ,action){
                     newState.moves.push(new Move(newState.guess, evaluation));
                 }
             }
+            break;
+        default:
             break;
     }
     return newState;

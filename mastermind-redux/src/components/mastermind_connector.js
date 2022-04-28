@@ -1,24 +1,23 @@
 import Mastermind from "./mastermind";
 import {connect} from "react-redux";
 
-let mapStateToProps = function(store){
+let mapStateToProps = function (store) {
     return {
-        // mastermind -> props.game
-       game : store.gameStore
+        game: store.gameStore
     }
 }
 
-let mapDispatchToProps = function(dispatch){
+let mapDispatchToProps = function (dispatch) {
     return {
         handleInputGuess: (event) => {
             let value = Number(event.target.value);
-            let type= "GUESS_CHANGED"
+            let type = "GUESS_CHANGED"
             dispatch({type, value})
         },
-        play: () =>{
+        play: () => {
             dispatch({type: "PLAY"})
         }
-    }  ;
+    };
 }
 
 let MastermindConnector = connect(

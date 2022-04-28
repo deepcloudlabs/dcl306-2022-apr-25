@@ -2,23 +2,9 @@ import React from "react";
 import GameStatistics from "./statistics";
 import CardTitle from "./card_title";
 import Badge from "./badge";
-import Move from "../model/move";
 
 // stateful -> stateless
 export default function Mastermind(props) {
-
-    /*
-    componentDidMount() {
-        let gameState = localStorage.getItem("mastermind-state")
-        if (gameState === null || gameState === undefined){
-            let state = {...this.state}
-            localStorage.setItem("mastermind-state", JSON.stringify(state))
-        } else {
-            let game = JSON.parse(gameState)
-            this.setState(game);
-        }
-    }
-     */
 
         let tableMoves = "";
         if (props.game.moves.length > 0){
@@ -30,8 +16,8 @@ export default function Mastermind(props) {
                 </tr>
                 </thead>
                 <tbody>{
-                    props.game.moves.map( move =>
-                        <tr key={move.guess}>
+                    props.game.moves.map( (move,index) =>
+                        <tr key={move.guess+index.toString()}>
                             <td>{move.guess}</td>
                             <td>{move.evaluation.evalstr}</td>
                         </tr>
